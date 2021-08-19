@@ -50,7 +50,7 @@
 
 <body>
     <div class="container">
-        <img src="{{ asset('Login/images/clinicalogo.png') }}" />
+        <img src="../public/img/clinicalogo1.png" />
         <h2 class="mb-4"> REGISTRO DE CONSULTAS </h2> <hr>
         <table class="table table-striped table-hover" border="1">
             <thead>

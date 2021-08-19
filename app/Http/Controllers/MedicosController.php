@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\medicos;
 use App\Models\municipios;
+use App\Models\Pacientes;
 use App\Models\Especialidades;
 use App\Models\consultas;
 use Session;
@@ -21,6 +22,8 @@ class MedicosController extends Controller
 
 
     public function alta_medicos(){
+      
+
       $sessionidusuario = session('sessionidusuario');
       if($sessionidusuario<>"")
       {
@@ -287,4 +290,49 @@ class MedicosController extends Controller
     $pdf = PDF::loadView('Sistema/Medicos/pdfm', compact('pdfmedicos'));
     return $pdf->download('pdf_Medicos.pdf');
   }
+  
+  public function altapacientes(){
+    $sessionidusuario = session('sessionidusuario');
+if($sessionidusuario<>"")
+{
+    $consulta = pacientes::withTrashed()->orderBy('idpaciente','DESC')->take(1)->get();
+    $cuantos = count($consulta);
+    if($cuantos==0){
+      $idesigue=1;
+    }
+    else{
+      $idesigue = $consulta[0]->idpaciente + 1;
+    }
+    return view('Sistema/Pacientes/pacientesusuario')
+    ->with('idesigue',$idesigue);
+  }
+  else{
+    return redirect('vistalogin')->with('status', 'Necesitas iniciar sesion');
+  }
+}
+public function guardarpacientes(Request $request){
+  $this->validate($request,[
+    'nombre'=> 'required|regex:/^[A-Z][A-Z,a-z, ,á,é,i,ó,ú,ü,Á,É,Í,Ó,Ú,Ü]+$/',
+    'apellidop'=> 'required|regex:/^[A-Z][A-Z,a-z, ,á,é,í,ñ,ó,ú,ü,Á,É,Í,Ó,Ú,Ü]+$/',
+    'apellidom'=> 'required|regex:/^[A-Z][A-Z,a-z, ,á,é,i,ó,ú,ü,Á,É,Í,Ó,Ú,Ü]+$/',
+    'edad'=> 'required|regex:/^[0-99]{2}+$/',
+    'telefono'=> 'required|regex:/^[0-9]{10}$/',
+    'correo'=> 'required|email',
+    'tiposangre'=>'required',
+  ]);
+  $pacientes = new pacientes;
+  $pacientes ->idpaciente=$request->idpaciente;
+  $pacientes ->nombre=$request->nombre;
+  $pacientes ->apellidop=$request->apellidop;
+  $pacientes ->apellidom=$request->apellidom;
+  $pacientes ->edad=$request->edad;
+  $pacientes ->sexo = $request->sexo;
+  $pacientes ->telefono=$request->telefono;
+  $pacientes ->correo=$request->correo;
+  $pacientes ->tiposangre=$request->tiposangre;
+  $pacientes ->save();
+
+  Session::flash('mensaje', "El paciente $request->nombre $request->apellidop ya es un nuevo paciente.");
+  return redirect()->route('reporte_consultas');
+}
 }

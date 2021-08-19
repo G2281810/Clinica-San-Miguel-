@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usuarios;
+use App\Models\Consultas;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use Mail;
@@ -23,7 +24,7 @@ class LoginController extends Controller
     $sessionidusuario = session('sessionidusuario');
     if($sessionidusuario<>"")
     {
-      return view('plantilla');
+      return view('mensaje');
     }else{
       return redirect('/')->with('status', 'Necesitas iniciar sesion');
     }
@@ -54,6 +55,7 @@ class LoginController extends Controller
                 if($cuantos==1 and Hash::check($request->password,$consulta[0]->password))
                 {
                   Session::put('sessionusuario',$consulta[0]->nombre . ' ' .$consulta[0]->apellidop . ' ' .$consulta[0]->apellidom);
+                  Session::put('sessionnombre', $consulta[0]->nombre . ' ' .$consulta[0]->apellidop . ' ' .$consulta[0]->apellidom);
                   Session::put('sessiontipo', $consulta[0]->tipou);
                   Session::put('sessionidusuario', $consulta[0]->idusuario);
 
@@ -67,7 +69,7 @@ class LoginController extends Controller
 
                   $sessionusuario = session('sessionusuario');
                   
-                  return view('mensaje')
+                  return redirect('principal')
                   ->with('sessionusuario',$sessionusuario);
             }
             else{

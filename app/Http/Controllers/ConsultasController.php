@@ -23,33 +23,35 @@ class ConsultasController extends Controller
   }
 
   public function altaconsulta(){
-    $sessionidusuario = session('sessionidusuario');
-      if($sessionidusuario<>"")
-      {
-          $consulta = consultas::withTrashed()->orderBy('idconsulta','DESC')
-                                ->take(1)->get();
-          $cuantos= count($consulta);
-          if($cuantos==0){
-          $idsigue = 1;
-          }
-          else{
-          $idsigue = $consulta[0]->idconsulta+1;
-          }
-
-          $status = statuses::orderBy('nombre')->get();
-          $medicos = medicos::orderBy('nombre')->get();
-          $especialidades = especialidades::orderBy('especialidad')->get();
-
-          return view('Sistema/Consultas/altaconsulta')
-                ->with('idsigue',$idsigue)
-                ->with('statuses',$status)
-                ->with('medicos',$medicos)
-                ->with('especialidades',$especialidades);
+  $sessionidusuario = session('sessionidusuario');
+  if($sessionidusuario<>"")
+  {
+      $consulta = consultas::withTrashed()->orderBy('idconsulta','DESC')
+                            ->take(1)->get();
+      $cuantos= count($consulta);
+      if($cuantos==0){
+      $idsigue = 1;
       }
       else{
-        return redirect('vistalogin')->with('status', 'Necesitas iniciar sesion');
+      $idsigue = $consulta[0]->idconsulta+1;
       }
+     
+
+      $status = statuses::orderBy('nombre')->get();
+      $medicos = medicos::orderBy('nombre')->get();
+      $especialidades = especialidades::orderBy('especialidad')->get();
+      $sessionusuarios = session('sessionusuarios');
+
+      return view('Sistema/Consultas/altaconsulta')
+            ->with('idsigue',$idsigue)
+            ->with('statuses',$status)
+            ->with('medicos',$medicos)
+            ->with('especialidades',$especialidades);
   }
+  else{
+    return redirect('vistalogin')->with('status', 'Necesitas iniciar sesion');
+  }
+}
 
   public function guardarconsulta(Request $request){
     $this->validate($request,[
@@ -80,6 +82,7 @@ class ConsultasController extends Controller
 
   public function reporteconsultas(){
     $sessionidusuario = session('sessionidusuario');
+    
       if($sessionidusuario<>"")
       {
         
@@ -98,11 +101,33 @@ class ConsultasController extends Controller
         return redirect('vistalogin')->with('status', 'Necesitas iniciar sesion');
       }
   }
+  
   public function reporte_consulta(Request $req){
+    $sessiontipou = session('sessiontipo');
+    if($sessiontipou=="usuario"){
+    $sessionnombre = session('sessionnombre');
     $sessionidusuario = session('sessionidusuario');
+    
+    
     if($sessionidusuario<>"")
     {
       $crit = $req['criterio'];
+      $res = DB::SELECT("SELECT c.idconsulta, c.fecha_consulta,c.paciente ,c.deleted_at, c.hora_consulta,c.idesp,es.especialidad AS especialidad,
+      c.idmedico,med.nombre,med.appaterno,med.apmaterno
+      AS apmaterno, c.idstatus,stat.nombre AS estatuscon, c.peso,c.observacion FROM consultas AS c
+     INNER JOIN especialidades AS es ON c.idesp = es.idesp
+     INNER JOIN medicos AS med ON c.idmedico = med.idmedico
+     INNER JOIN statuses AS stat ON c.idstatus = stat.idstatus 
+     WHERE '$sessionnombre' = c.paciente
+     ");
+      // return $res;
+      return view ("Sistema/Consultas/reporteconsultas",['res'=>$res, 'crit'=>$crit]);
+    }else{
+      return redirect('vistalogin')->with('status', 'Necesitas iniciar sesion');
+    }
+  }
+  else{
+    $crit = $req['criterio'];
       $res = DB::SELECT("SELECT c.idconsulta, c.fecha_consulta,c.paciente ,c.deleted_at, c.hora_consulta,c.idesp,es.especialidad AS especialidad, c.idmedico,med.nombre,med.appaterno,med.apmaterno
       AS apmaterno, c.idstatus,stat.nombre AS estatuscon, c.peso,c.observacion FROM consultas AS c
      INNER JOIN especialidades AS es ON c.idesp = es.idesp
@@ -111,14 +136,9 @@ class ConsultasController extends Controller
      AND (paciente LIKE '%$crit%' OR fecha_consulta LIKE '%$crit%' OR hora_consulta LIKE '%$crit%') ORDER BY c.idconsulta DESC");
       // return $res;
       return view ("Sistema/Consultas/reporteconsultas",['res'=>$res, 'crit'=>$crit]);
-    }else{
-      return redirect('vistalogin')->with('status', 'Necesitas iniciar sesion');
-    }
+  }
   }
   
-
-
-
   public function desactivaconsulta($idconsulta){
     $consultas = consultas::find($idconsulta);
     $consultas->delete();
@@ -221,5 +241,37 @@ class ConsultasController extends Controller
   public function export(){
     return $this->excel->download(new ConsultasExport, 'consultas.xlsx');
   }
+
+  public function verconsulta ($idconsulta){
+    $sessionidusuario = session('sessionidusuario');
+      if($sessionidusuario<>"")
+      {
+        $consulta = consultas::withTrashed()
+                              ->join('medicos','consultas.idmedico','=','medicos.idmedico')
+
+                              ->join('statuses','consultas.idstatus','=','statuses.idstatus')
+                              ->join('especialidades','consultas.idesp','=','especialidades.idesp')
+        ->select('consultas.idconsulta','consultas.fecha_consulta','consultas.hora_consulta','consultas.observacion','consultas.peso',
+                'especialidades.especialidad as esp','consultas.paciente',
+
+                'medicos.nombre','medicos.appaterno','medicos.apmaterno',
+
+                'consultas.idmedico','statuses.nombre as stat','consultas.idstatus','consultas.idesp')
+        ->where('idconsulta',$idconsulta)
+        ->get();
+        $medicos = medicos::all();
+        $statuses = statuses::all();
+        $especialidades = especialidades::all();
+        return view ('Sistema/Consultas/verconsulta')
+        ->with('consulta',$consulta[0])
+        ->with('medicos',$medicos)
+        ->with('statuses',$statuses)
+        ->with('especialidades',$especialidades);
+      }
+      else{
+        return redirect('vistalogin')->with('status', 'Necesitas iniciar sesion');
+      }
+  }
+  
   
 }

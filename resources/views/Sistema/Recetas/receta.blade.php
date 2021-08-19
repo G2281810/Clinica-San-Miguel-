@@ -157,7 +157,7 @@ p{
     <div>
     <div class="encabezado">
         <div class="imagen">
-            <img src="{{ asset('img/clinicalogo.png')}}" alt="img" height="80" width="150">
+            <img src="../public/img/clinicalogo.png"  alt="img" height="80" width="150">
         </div>
         <div class="informacionmedico">
             <h1>Clinica San Miguel</h1>
@@ -175,7 +175,7 @@ p{
     </div>
 
     <div class="padre">
-        <img src="{{asset('img/clinicalogo.png')}}" height="250" class="fondo">
+        <img src="../public/img/clinicalogo.png" height="250" class="fondo">
         <div class="hijo">
             <p class="medicamento">Medicamento: {{$c->medicamento}}</p>
             <p class="dosis">Dosis:{{$c->dosis}}</p> <br> <br>

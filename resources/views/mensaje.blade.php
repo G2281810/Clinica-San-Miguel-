@@ -6,6 +6,9 @@
         <div class="col-md-11 ml-auto mr-auto">
             <div class="card">
                 <div class="card-header card-header-primary">
+                    <?php 
+                    $sessionusuario=session('sessionusuario');
+                    ?>
                     <center>
                         <h3 class="card-title">Bienvenido <?php echo $sessionusuario?></h3>
                     </center>

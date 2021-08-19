@@ -118,7 +118,7 @@
                               @endif
                               
                               @else
-                              <a href="#"
+                              <a href="{{route('verconsulta',['idconsulta'=>$c->idconsulta])}}"
                               <button type="button" class="btn btn-success btn-sm">Ver consulta</button>
                               </a>
                               @endif

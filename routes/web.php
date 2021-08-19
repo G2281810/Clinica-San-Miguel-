@@ -39,6 +39,8 @@ Route::post('valida',[LoginController::class,'valida'])->name('valida');
 Route::get('logout',[LoginController::class,'logout'])->name('logout');
 Route::get('pacientes',[LoginController::class,'pacientes'])->name('pacientes');
 Route::get('principal',[LoginController::class,'principal'])->name('principal');
+Route::get('pacientesusuario',[MedicosController::class,'altapacientes'])->name('pacientesusuario');
+Route::post('/guardarpacientes',[MedicosController::class,'guardarpacientes'])->name('guardarpacientes');
 
 
 /// Rutas restauracion de contraseña ///
@@ -54,6 +56,8 @@ Route::POST('guardacambios',[ConsultasController::class,'guardacambios'])->name(
 route::get('desactivaconsulta/{idconsulta}',[ConsultasController::class,'desactivaconsulta'])->name('desactivaconsulta');
 route::get('activarconsulta/{idconsulta}',[ConsultasController::class,'activarconsulta'])->name('activarconsulta');
 route::get('borraconsulta/{idconsulta}',[ConsultasController::class,'borraconsulta'])->name('borraconsulta');
+Route::get('verconsulta/{idconsulta}',[ConsultasController::class,'verconsulta'])->name('verconsulta');
+
 
 Route::get('reporte_consulta',[ConsultasController::class,'reporte_consulta'])->name('reporte_consultas');
 Route::get('buscarconsulta',[ConsultasController::class,'reporte_consulta'])->name('buscarconsulta');

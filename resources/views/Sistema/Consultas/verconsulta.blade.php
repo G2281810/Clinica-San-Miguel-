@@ -10,7 +10,7 @@
           <p class="card-category">Modifica tus datos.</p>
         </div>
         <div class="card-body">
-          <form action="{{ route ('guardacambios')}}" method="POST">
+          
             {{csrf_field()}}
             <?php $sessiontipou = session('sessiontipo'); ?>
           
@@ -33,10 +33,10 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="bmd-label-floating">Área de especialización</label>
-                  <select class="form-control" name="idesp">
+                  <select class="form-control" name="idesp" readonly="readonly">
                      <option selected="selected" class="txtselect"value="{{$consulta->idesp}}">{{$consulta->esp}}</option>
                          @foreach($especialidades as $esp)
-                          <option value="{{$esp->idesp}}">{{$esp->especialidad}}</option>
+                          
                         @endforeach
                   </select>
                    @if($errors->first('idesp'))
@@ -48,10 +48,10 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="bmd-label-floating">Médico</label>
-                  <select class="form-control" name="idmedico">
-                    <option selected="selected" value="{{$consulta->idmedico}}" class="txtselect">{{$consulta->medico}} {{$consulta->appaterno}} {{$consulta->apmaterno}}</option>
+                  <select class="form-control" name="idmedico" readonly="readonly">
+                    <option selected="selected" value="{{$consulta->idmedico}}" class="txtselect">{{$consulta->nombre}} {{$consulta->appaterno}} {{$consulta->apmaterno}}</option>
                       @foreach($medicos as $medico)
-                      <option value="{{$medico->idmedico}}">{{$medico->nombre}} {{$medico->appaterno}} {{$medico->apmaterno}}</option>
+                      
                       @endforeach
                   </select>
                   @if($errors->first('idmedico'))
@@ -66,7 +66,7 @@
               <div class="col-md-5">
                 <div class="form-group">
                   <label class="">Fecha de consulta</label>
-                  <input type="text" name="fecha_consulta" class="form-control" id="fecha_consulta" value="{{$consulta->fecha_consulta}}">
+                  <input type="text" name="fecha_consulta" class="form-control" id="fecha_consulta" value="{{$consulta->fecha_consulta}}" readonly="readonly">
                   @if($errors->first('fecha_consulta'))
                     <p class="text-danger">{{$errors->first('fecha_consulta')}}</p>
                   @endif
@@ -76,7 +76,7 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="bmd-label-floating">Hora de consulta</label>
-                  <input type="text" name="hora_consulta" class="form-control" id="hora_consulta" value="{{$consulta->hora_consulta}}">
+                  <input type="text" name="hora_consulta" class="form-control" id="hora_consulta" value="{{$consulta->hora_consulta}}" readonly="readonly">
                   @if($errors->first('hora_consulta'))
                     <p class="text-danger">{{$errors->first('hora_consulta')}}</p>
                   @endif
@@ -86,7 +86,7 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="bmd-label-floating">Peso aprox</label>
-                  <input type="text" class="form-control" name="peso" id="peso" value="{{$consulta->peso}}">
+                  <input type="text" class="form-control" name="peso" id="peso" value="{{$consulta->peso}}" readonly="readonly">
                    @if($errors->first('peso'))
                     <p class="text-danger">{{$errors->first('peso')}}</p>
                   @endif
@@ -101,7 +101,7 @@
                   <label>Observaciones</label>
                   <div class="form-group">
                     <label class="bmd-label-floating"> Comentanos algunos de tus sintomas</label>
-                <textarea class="form-control" rows="3" id="obser" name="obser" >{{$consulta->observacion}}</textarea>
+                <textarea class="form-control" rows="3" id="obser" name="obser"readonly="readonly" >{{$consulta->observacion}}</textarea>
                   </div>
                 </div>
               </div>
@@ -112,7 +112,7 @@
               <div class="form-group">
                 <label class="bmd-label-floating">Estatus</label>
                 <select class="form-control" name="idstatus">
-                    <option selected="selected" class="txtselect"value="{{$consulta->idstatus}}">{{$consulta->stat}}</option>
+                    <option selected="selected" class="txtselect"value="{{$consulta->idstatus}}" readonly="readonly">{{$consulta->stat}}</option>
                         @foreach($statuses as $stat)
                             <option value="{{$stat->idstatus}}">{{$stat->nombre}}</option>
                         @endforeach
@@ -123,13 +123,11 @@
               </div>
             </div>
             @endif
-            <input type="submit" value="Guardar datos" class="btn btn-primary pull-right" tabindex="7"
-                title="Guardar datos ingresados">
                 <a href="{{route('reporte_consultas')}}"
-                  <button type="submit" class="btn btn-primary pull-right">Salir</button>
+                  <button type="submit" class="btn btn-primary pull-right">Regresar a reporte</button>
                 </a>
             <div class="clearfix"></div>
-          </form>
+          
         </div>
       </div>
     </div>

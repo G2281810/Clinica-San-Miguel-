@@ -2,17 +2,17 @@
 
 @section('contenido')
 <?php 
-        $sessionusuario = session('sessionusuario');
-        $sessiontipou = session('sessiontipo');
-        $sessionidusuario = session('sessionidusuario');
+        
+        $sessionnombre = session('sessionnombre');
         ?>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-10 ml-auto mr-auto">
       <div class="card">
         <div class="card-header card-header-primary">
           <h4 class="card-title">Alta consulta</h4>
-          <p class="card-category">Completa este formulario</p>
+          <p class="card-category">Completa este formulario </p>
         </div>
         <div class="card-body">
           <form action="{{ route ('guardarconsulta')}}" method="POST">
@@ -24,13 +24,23 @@
                   <input type="text" class="form-control" value="{{$idsigue}}" name="idconsulta" readonly="readonly">
                 </div>
               </div>
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label class="bmd-label-floating">Paciente:</label>
-                    <input type="text" class="form-control" value="<?php echo $sessionusuario?>" name="paciente" id="paciente" readonly="readonly">
+              <?php $sessiontipou = session('sessiontipo'); ?>
+              @if($sessiontipou=="administrador")
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Paciente:</label>
+                      <input type="text" class="form-control" value="" name="paciente" id="paciente">
+                  </div>
                 </div>
-              </div>
-
+              @else
+              
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Paciente:</label>
+                      <input type="text" class="form-control" value="<?php echo $sessionnombre?>" name="paciente" id="paciente" readonly="readonly">
+                  </div>
+                </div>
+              @endif
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="bmd-label-floating">Área de especialización</label>

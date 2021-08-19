@@ -30,7 +30,7 @@
 
         Tip 2: you can also add an image using data-image tag
     -->
-      <div class="logo"><a href="#" class="simple-text logo-normal">
+      <div class="logo"><a href="{{route('principal')}}" class="simple-text logo-normal">
           <img src="{{ asset ('Login/images/clinicalogo.png') }}" alt="IMG" height="60" width="200">
         </a></div>
         
@@ -55,7 +55,7 @@
           <li class="nav-item active">
             <a class="nav-link" href="{{ route ('consulta_medicos') }}">
               <i class="material-icons">person</i>
-              <p>Medicos</p>
+              <p>Médicos</p>
             </a>
           </li>
           <li class="nav-item active">
@@ -132,9 +132,9 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
                  
-                  <a class="dropdown-item" href="{{ route('logout') }}">Cerrar Sesión</a>
+                  <a class="dropdown-item" href="{{ route('pacientesusuario') }}">Ser nuevo Paciente</a>
                   <div class="dropdown-divider"></div>
-                  
+                  <a class="dropdown-item" href="{{ route('logout') }}">Cerrar Sesión</a>
                 </div>
               </li>
             </ul>
@@ -146,6 +146,7 @@
       <div class="content">
         @yield('contenido')
         <?php 
+        
         $sessionusuario = session('sessionusuario');
         $sessiontipou = session('sessiontipo');
         $sessionidusuario = session('sessionidusuario');

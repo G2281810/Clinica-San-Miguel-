@@ -2,9 +2,8 @@
 
 @section('contenido')
 <?php 
-        $sessionusuario = session('sessionusuario');
-        $sessiontipou = session('sessiontipo');
-        $sessionidusuario = session('sessionidusuario');
+        
+        $sessionnombre = session('sessionnombre');
         ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -14,7 +13,7 @@
             <div class="card">
                 <div class="card-header card-header-primary">
                     <h4 class="card-title">Recetas</h4>
-                    <p class="card-category">Completa este formulario</p>
+                    <p class="card-category">Completa este formulario </p>
                 </div>
 
                 
@@ -49,7 +48,7 @@
                             <div class="form-group">
                                 <label class="bmd-label-floating">Medico:</label>
                                 
-                                <input type="text" class="form-control" value="<?php echo $sessionusuario?>" name="medico" id="medico">
+                                <input type="text" class="form-control" value="<?php echo $sessionnombre?>" name="medico" id="medico" readonly="readonly">
 
                             </div>
                         </div>
